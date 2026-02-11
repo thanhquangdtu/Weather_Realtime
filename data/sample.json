@@ -1,0 +1,118 @@
+{
+  "sample_weather_data": {
+    "city": "Hanoi",
+    "timestamp": "2024-02-11T13:45:00",
+    "temperature": 25.5,
+    "feels_like": 26.2,
+    "temp_min": 24.0,
+    "temp_max": 27.0,
+    "pressure": 1013,
+    "humidity": 65,
+    "weather_main": "Clouds",
+    "weather_description": "scattered clouds",
+    "wind_speed": 3.5,
+    "wind_deg": 180,
+    "clouds": 40,
+    "country": "VN",
+    "sunrise": 1707620400,
+    "sunset": 1707662400,
+    "timezone": 25200,
+    "visibility": 10000,
+    "rain_1h": 0,
+    "rain_3h": 0
+  },
+  "sample_messages": [
+    {
+      "city": "Hanoi",
+      "temperature": 28.5,
+      "humidity": 70,
+      "weather_main": "Clear",
+      "timestamp": "2024-02-11T14:00:00"
+    },
+    {
+      "city": "Ho Chi Minh City",
+      "temperature": 32.0,
+      "humidity": 75,
+      "weather_main": "Rain",
+      "timestamp": "2024-02-11T14:00:00"
+    },
+    {
+      "city": "Da Nang",
+      "temperature": 26.5,
+      "humidity": 68,
+      "weather_main": "Clouds",
+      "timestamp": "2024-02-11T14:00:00"
+    }
+  ],
+  "kafka_message_example": {
+    "key": "hanoi",
+    "value": {
+      "city": "Hanoi",
+      "timestamp": "2024-02-11T14:00:00",
+      "temperature": 25.5,
+      "feels_like": 26.2,
+      "temp_min": 24.0,
+      "temp_max": 27.0,
+      "pressure": 1013,
+      "humidity": 65,
+      "weather_main": "Clouds",
+      "weather_description": "scattered clouds",
+      "wind_speed": 3.5,
+      "wind_deg": 180,
+      "clouds": 40,
+      "country": "VN",
+      "sunrise": 1707620400,
+      "sunset": 1707662400,
+      "timezone": 25200,
+      "visibility": 10000,
+      "rain_1h": 0,
+      "rain_3h": 0
+    },
+    "headers": {
+      "source": "weather_producer",
+      "version": "1.0"
+    }
+  },
+  "cities_metadata": [
+    {
+      "city_name": "Hanoi",
+      "country_code": "VN",
+      "latitude": 21.0285,
+      "longitude": 105.8542,
+      "timezone": 25200,
+      "population": 8246600
+    },
+    {
+      "city_name": "Ho Chi Minh City",
+      "country_code": "VN",
+      "latitude": 10.8231,
+      "longitude": 106.6297,
+      "timezone": 25200,
+      "population": 9077158
+    },
+    {
+      "city_name": "Da Nang",
+      "country_code": "VN",
+      "latitude": 16.0544,
+      "longitude": 108.2022,
+      "timezone": 25200,
+      "population": 1134000
+    },
+    {
+      "city_name": "Hai Phong",
+      "country_code": "VN",
+      "latitude": 20.8449,
+      "longitude": 106.6881,
+      "timezone": 25200,
+      "population": 2028514
+    },
+    {
+      "city_name": "Can Tho",
+      "country_code": "VN",
+      "latitude": 10.0452,
+      "longitude": 105.7469,
+      "timezone": 25200,
+      "population": 1238000
+    }
+  ]
+}
