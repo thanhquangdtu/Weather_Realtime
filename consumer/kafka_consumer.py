@@ -65,13 +65,12 @@ class WeatherConsumer:
             self.consumer = KafkaConsumer(
                 self.kafka_topic,
                 bootstrap_servers=[self.kafka_servers],
-                auto_offset_reset='earliest',  # Đọc từ đầu topic
+                auto_offset_reset='earliest',  # Đ ọc từ đầu topic
                 enable_auto_commit=True,
                 group_id='weather_consumer_group',
                 value_deserializer=lambda x: json.loads(x.decode('utf-8')),
-                consumer_timeout_ms=10000,  # Timeout sau 10 giây không có message
                 api_version=(0, 10, 1),  # Kafka API version
-                request_timeout_ms=30000,  # Request timeout 30 giây
+                request_timeout_ms=40000,  # Request timeout 40 giây (phải lớn hơn session timeout)
                 session_timeout_ms=30000,  # Session timeout 30 giây
                 heartbeat_interval_ms=10000,  # Heartbeat interval 10 giây
                 max_poll_interval_ms=300000  # Max poll interval 5 phút
@@ -91,7 +90,10 @@ class WeatherConsumer:
             data: Dictionary chứa weather data
         """
         try:
-            with self.db_connection.cursor() as cursor:
+            # Tạo connection mới cho mỗi insert để tránh lỗi connection closed
+            connection = pymysql.connect(**self.mysql_config)
+            
+            with connection.cursor() as cursor:
                 sql = """
                 INSERT INTO weather_data (
                     city, timestamp, temperature, feels_like, temp_min, temp_max,
@@ -132,14 +134,18 @@ class WeatherConsumer:
                 }
                 
                 cursor.execute(sql, insert_data)
-                self.db_connection.commit()
+                connection.commit()
                 
                 logger.info(f"✓ Inserted data for {data.get('city')} at {data.get('timestamp')}")
-                return True
+                
+            connection.close()
+            return True
                 
         except Exception as e:
             logger.error(f"✗ Failed to insert data: {str(e)}")
-            self.db_connection.rollback()
+            if 'connection' in locals():
+                connection.rollback()
+                connection.close()
             return False
     
     def consume_messages(self):
@@ -153,6 +159,7 @@ class WeatherConsumer:
         message_count = 0
         
         try:
+            # Loop forever waiting for messages
             for message in self.consumer:
                 message_count += 1
                 data = message.value
@@ -169,7 +176,7 @@ class WeatherConsumer:
                     logger.info(f"   ✓ Total messages processed: {message_count}")
                 else:
                     logger.warning(f"   ✗ Failed to process message #{message_count}")
-                
+                    
         except KeyboardInterrupt:
             logger.info("\n" + "=" * 70)
             logger.info(f"Shutting down consumer... Total messages processed: {message_count}")
@@ -192,13 +199,14 @@ class WeatherConsumer:
     def run(self):
         """Main run method"""
         try:
-            # Kết nối MySQL
-            if not self.connect_mysql():
-                return False
+            # Test MySQL connection
+            logger.info("Testing MySQL connection...")
+            test_conn = pymysql.connect(**self.mysql_config)
+            test_conn.close()
+            logger.info("✓ MySQL connection test successful")
             
             # Tạo Kafka consumer
             if not self.create_kafka_consumer():
-                self.close()
                 return False
             
             # Bắt đầu consume messages

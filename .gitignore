@@ -81,7 +81,12 @@ derby.log
 # Data files
 data/*.csv
 data/*.parquet
-!data/sample.json
+data/*.json
+
+# Test files
+**/test_*.py
+**/*_test.py
+**/tests/
 
 # Docker
 docker-compose.override.yml
