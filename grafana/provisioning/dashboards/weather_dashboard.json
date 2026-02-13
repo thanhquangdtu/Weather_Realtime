@@ -1,0 +1,158 @@
+{
+  "dashboard": {
+    "title": "Weather Real-time Dashboard",
+    "tags": ["weather", "real-time"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "type": "graph",
+        "title": "Temperature Over Time",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT timestamp as time, temperature FROM weather_data ORDER BY timestamp DESC LIMIT 100",
+            "format": "time_series"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "Temperature (°C)",
+            "format": "celsius"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "type": "graph",
+        "title": "Humidity Over Time",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT timestamp as time, humidity FROM weather_data ORDER BY timestamp DESC LIMIT 100",
+            "format": "time_series"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "Humidity (%)",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 8,
+          "h": 6
+        },
+        "type": "stat",
+        "title": "Current Temperature",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT temperature FROM weather_data ORDER BY timestamp DESC LIMIT 1",
+            "format": "table"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "celsius"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "gridPos": {
+          "x": 8,
+          "y": 8,
+          "w": 8,
+          "h": 6
+        },
+        "type": "stat",
+        "title": "Current Humidity",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT humidity FROM weather_data ORDER BY timestamp DESC LIMIT 1",
+            "format": "table"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "gridPos": {
+          "x": 16,
+          "y": 8,
+          "w": 8,
+          "h": 6
+        },
+        "type": "stat",
+        "title": "Total Records",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT COUNT(*) as count FROM weather_data",
+            "format": "table"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "textMode": "value_and_name"
+        }
+      },
+      {
+        "id": 6,
+        "gridPos": {
+          "x": 0,
+          "y": 14,
+          "w": 24,
+          "h": 8
+        },
+        "type": "table",
+        "title": "Latest Weather Data",
+        "targets": [
+          {
+            "datasource": "MySQL Weather DB",
+            "rawSql": "SELECT * FROM weather_data ORDER BY timestamp DESC LIMIT 20",
+            "format": "table"
+          }
+        ]
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 27,
+    "version": 0
+  },
+  "overwrite": true
+}

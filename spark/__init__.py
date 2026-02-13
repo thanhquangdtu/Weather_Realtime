@@ -1,1 +1,0 @@
-"""Spark streaming package"""
