@@ -1,12 +1,4 @@
 
-## � Kiến trúc hệ thống
-
-```
-Weather API → Producer → Kafka → Consumer → MySQL
-                          ↑
-                     Zookeeper
-```
-
 **Luồng dữ liệu:**
 1. **Producer** fetch weather data từ OpenWeatherMap API
 2. **Producer** gửi data vào **Kafka** (topic: weather_data)
@@ -14,7 +6,7 @@ Weather API → Producer → Kafka → Consumer → MySQL
 4. **Consumer** đọc messages từ **Kafka**
 5. **Consumer** insert data vào **MySQL** database
 
-## 🚀 Hướng dẫn cài đặt
+## Hướng dẫn cài đặt
 
 ### 1. Cấu hình môi trường
 
